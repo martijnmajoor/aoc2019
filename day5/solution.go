@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	opcodes := program.Read("program.txt")
-
-	fmt.Println("part one:", program.Diagnose(opcodes, 1))
+	fmt.Println("part one:", program.Diagnose(program.Read("program.txt"), 1))
+	fmt.Println("part two:", program.Diagnose(program.Read("program.txt"), 5))
 }

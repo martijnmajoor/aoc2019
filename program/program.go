@@ -48,6 +48,22 @@ func process(codes []int, input int) (int, int) {
 		case 4:
 			outputs = append(outputs, codes[code[1]])
 			step += 2
+		case 5:
+			step += 3
+			if code[1] != 0 {
+				step = code[2]
+			}
+		case 6:
+			step += 3
+			if code[1] == 0 {
+				step = code[2]
+			}
+		case 7:
+			codes[code[3]] = cond(code[1] < code[2])
+			step += 4
+		case 8:
+			codes[code[3]] = cond(code[1] == code[2])
+			step += 4
 		}
 
 		quit = codes[step] == halt
@@ -71,5 +87,12 @@ func get(codes []int, idx int, immediate bool) int {
 	return codes[codes[idx]]
 }
 func immediate(op int, code int) bool {
-	return op > 2 || code == 1
+	return op == 3 || op == 4 || code == 1
+}
+func cond(validates bool) int {
+	if validates {
+		return 1
+	}
+
+	return 0
 }
