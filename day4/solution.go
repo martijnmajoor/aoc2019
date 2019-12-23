@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 )
 
@@ -9,21 +10,24 @@ func main() {
 	min := 109165
 	max := 576723
 
-	fmt.Println("part one:", matches(min, max))
+	fmt.Println("part one:", matches(min, max, false))
+	fmt.Println("part two:", matches(min, max, true))
 }
-func matches(min int, max int) (matches int) {
-	for i := min; i < max; i++ {
+func matches(min int, max int, exact bool) (matches int) {
+	for i := min; i <= max; i++ {
 		pass := strconv.Itoa(i)
-		if adjacent(pass) && !decreases(pass) {
+		if adjacent(pass, exact) && !decreases(pass) {
 			matches++
 		}
 	}
 	return
 }
-func adjacent(pass string) bool {
+func adjacent(pass string, exact bool) bool {
 	for idx := range pass {
-		if idx > 0 && pass[idx] == pass[idx-1] {
-			return true
+		if idx < len(pass)-1 && pass[idx] == pass[idx+1] {
+			if !exact || !larger(pass, pass[idx]) {
+				return true
+			}
 		}
 	}
 
@@ -42,4 +46,10 @@ func decreases(pass string) bool {
 	}
 
 	return false
+}
+func larger(pass string, digit byte) bool {
+	pattern := fmt.Sprintf("%v{3,}", string(digit))
+	match, _ := regexp.MatchString(pattern, pass)
+
+	return match
 }
