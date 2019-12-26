@@ -15,8 +15,8 @@ func main() {
 func count(orbits []string) (total int) {
 	objects := direct(orbits)
 
-	for _, other := range objects {
-		total += follow(other, objects)
+	for object := range objects {
+		total += len(transfers(object, "COM", objects))
 	}
 
 	return
@@ -31,13 +31,10 @@ func direct(orbits []string) (objects map[string]string) {
 
 	return
 }
-func follow(target string, objects map[string]string) (steps int) {
-	for target != "COM" {
-		target = objects[target]
-		steps++
+func transfers(source string, target string, objects map[string]string) (transfers []string) {
+	for source != target {
+		transfers = append(transfers, objects[source])
+		source = objects[source]
 	}
-
-	steps++ // direct orbit to COM
-
 	return
 }
